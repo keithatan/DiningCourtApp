@@ -1,0 +1,9 @@
+\\mac\home\documents\visual studio 2017\Projects\DiningCourtApp\DiningCourtApp\bin\Debug\DiningCourtApp.exe.config
+\\mac\home\documents\visual studio 2017\Projects\DiningCourtApp\DiningCourtApp\bin\Debug\DiningCourtApp.exe
+\\mac\home\documents\visual studio 2017\Projects\DiningCourtApp\DiningCourtApp\bin\Debug\DiningCourtApp.pdb
+\\mac\home\documents\visual studio 2017\Projects\DiningCourtApp\DiningCourtApp\obj\Debug\DiningCourtApp.csprojResolveAssemblyReference.cache
+\\mac\home\documents\visual studio 2017\Projects\DiningCourtApp\DiningCourtApp\obj\Debug\DiningCourtApp.AppForm.resources
+\\mac\home\documents\visual studio 2017\Projects\DiningCourtApp\DiningCourtApp\obj\Debug\DiningCourtApp.Properties.Resources.resources
+\\mac\home\documents\visual studio 2017\Projects\DiningCourtApp\DiningCourtApp\obj\Debug\DiningCourtApp.csproj.GenerateResource.Cache
+\\mac\home\documents\visual studio 2017\Projects\DiningCourtApp\DiningCourtApp\obj\Debug\DiningCourtApp.exe
+\\mac\home\documents\visual studio 2017\Projects\DiningCourtApp\DiningCourtApp\obj\Debug\DiningCourtApp.pdb
