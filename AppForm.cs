@@ -4,10 +4,13 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Xml.Linq;
 
 namespace DiningCourtApp
 {
@@ -20,6 +23,56 @@ namespace DiningCourtApp
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            
+        }
+
+        public class MenuPopulater
+        {
+            String name;
+            public MenuPopulater(String name)
+            {
+                this.name = name;
+            }
+
+            public void populateMenu(LLDCourt court)
+            {
+                string result = null;
+                string url = "https://api.hfs.purdue.edu/menus/v2/locations/" + name + "/2017-04-25" ;
+                HttpWebResponse response = null;
+                StreamReader reader = null;
+
+                try
+                {
+                    HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
+                    request.UserAgent = @"Mozilla/6.0 (Windows NT 6.1; WOW64) AppleWebKit/535.2 (KHTML, like Gecko) Chrome/15.0.874.121 Safari/535.2";
+                    request.Method = "GET";
+                    request.Accept = "application/xml";
+                    request.ContentType = "application/xml";
+                    response = request.GetResponse() as HttpWebResponse;
+                    reader = new StreamReader(response.GetResponseStream(), Encoding.UTF8);
+
+                    result = reader.ReadToEnd();
+                    System.Console.WriteLine(result);
+                    XDocument xdoc = XDocument.Parse(result);
+                    foreach (var childElement4 in xdoc.Root.Elements("Meals").Elements("Meal").Elements("Stations").Elements("Station").Elements("Items").Elements("Item").Elements("Name"))
+                        court.getLunchMenu().addFood(new Food(childElement4.Value));
+          
+
+                }
+                catch (Exception ex)
+                {
+                    // handle error
+                    MessageBox.Show(ex.Message);
+                }
+                finally
+                {
+                    if (reader != null)
+                        reader.Close();
+                    if (response != null)
+                        response.Close();
+                }
+            }
+
 
         }
 
@@ -32,6 +85,11 @@ namespace DiningCourtApp
             {
                 this.name = "";
                 this.isVegetarian = false;
+            }
+
+            public Food(String name)
+            {
+                this.name = name;
             }
 
             public Food(String name, Boolean isVegetarian)
@@ -81,6 +139,8 @@ namespace DiningCourtApp
 
             Menu getDinnerMenu();
             Menu getLunchMenu();
+         
+
         }
 
         public class LLDCourt : DiningCourt //Hillenbrand and Windsor
