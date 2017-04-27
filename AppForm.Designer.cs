@@ -33,10 +33,8 @@
             this.lstOut = new System.Windows.Forms.ListBox();
             this.btnEnd = new System.Windows.Forms.Button();
             this.btnEnter = new System.Windows.Forms.Button();
-            this.chkAlergy = new System.Windows.Forms.CheckBox();
             this.cboFood = new System.Windows.Forms.ComboBox();
             this.cboTime = new System.Windows.Forms.ComboBox();
-            this.label4 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
@@ -67,34 +65,25 @@
             // 
             // btnEnd
             // 
-            this.btnEnd.Location = new System.Drawing.Point(398, 432);
+            this.btnEnd.Location = new System.Drawing.Point(298, 322);
             this.btnEnd.Margin = new System.Windows.Forms.Padding(6);
             this.btnEnd.Name = "btnEnd";
-            this.btnEnd.Size = new System.Drawing.Size(150, 44);
+            this.btnEnd.Size = new System.Drawing.Size(239, 154);
             this.btnEnd.TabIndex = 20;
             this.btnEnd.Text = "Exit";
             this.btnEnd.UseVisualStyleBackColor = true;
+            this.btnEnd.Click += new System.EventHandler(this.btnEnd_Click);
             // 
             // btnEnter
             // 
-            this.btnEnter.Location = new System.Drawing.Point(26, 432);
+            this.btnEnter.Location = new System.Drawing.Point(26, 322);
             this.btnEnter.Margin = new System.Windows.Forms.Padding(6);
             this.btnEnter.Name = "btnEnter";
-            this.btnEnter.Size = new System.Drawing.Size(260, 44);
+            this.btnEnter.Size = new System.Drawing.Size(260, 154);
             this.btnEnter.TabIndex = 19;
             this.btnEnter.Text = "Find me a Dining Court";
             this.btnEnter.UseVisualStyleBackColor = true;
-            // 
-            // chkAlergy
-            // 
-            this.chkAlergy.AutoSize = true;
-            this.chkAlergy.Location = new System.Drawing.Point(299, 335);
-            this.chkAlergy.Margin = new System.Windows.Forms.Padding(6);
-            this.chkAlergy.Name = "chkAlergy";
-            this.chkAlergy.Size = new System.Drawing.Size(82, 29);
-            this.chkAlergy.TabIndex = 18;
-            this.chkAlergy.Text = "Yes";
-            this.chkAlergy.UseVisualStyleBackColor = true;
+            this.btnEnter.Click += new System.EventHandler(this.btnEnter_Click);
             // 
             // cboFood
             // 
@@ -124,22 +113,13 @@
             this.cboTime.Items.AddRange(new object[] {
             "Breakfast",
             "Lunch",
-            "Dinner"});
+            "Dinner",
+            "Late Lunch"});
             this.cboTime.Location = new System.Drawing.Point(299, 197);
             this.cboTime.Margin = new System.Windows.Forms.Padding(6);
             this.cboTime.Name = "cboTime";
             this.cboTime.Size = new System.Drawing.Size(238, 33);
             this.cboTime.TabIndex = 16;
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(21, 337);
-            this.label4.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(145, 25);
-            this.label4.TabIndex = 15;
-            this.label4.Text = "Food Allergy?";
             // 
             // label3
             // 
@@ -196,7 +176,7 @@
             // recLabel
             // 
             this.recLabel.AutoSize = true;
-            this.recLabel.Location = new System.Drawing.Point(604, 262);
+            this.recLabel.Location = new System.Drawing.Point(614, 250);
             this.recLabel.Name = "recLabel";
             this.recLabel.Size = new System.Drawing.Size(0, 25);
             this.recLabel.TabIndex = 23;
@@ -211,10 +191,8 @@
             this.Controls.Add(this.lstOut);
             this.Controls.Add(this.btnEnd);
             this.Controls.Add(this.btnEnter);
-            this.Controls.Add(this.chkAlergy);
             this.Controls.Add(this.cboFood);
             this.Controls.Add(this.cboTime);
-            this.Controls.Add(this.label4);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.pictureBox1);
@@ -235,10 +213,8 @@
         private System.Windows.Forms.ListBox lstOut;
         private System.Windows.Forms.Button btnEnd;
         private System.Windows.Forms.Button btnEnter;
-        private System.Windows.Forms.CheckBox chkAlergy;
         private System.Windows.Forms.ComboBox cboFood;
         private System.Windows.Forms.ComboBox cboTime;
-        private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.PictureBox pictureBox1;

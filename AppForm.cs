@@ -16,6 +16,11 @@ namespace DiningCourtApp
 {
     public partial class AppForm : Form
     {
+        LLDCourt Hillenbrand = new LLDCourt();
+        LLDCourt Windsor = new LLDCourt();
+        BLDCourt Earhart = new BLDCourt();
+        BLDCourt Wiley = new BLDCourt();
+        FordCourt Ford = new FordCourt();
         public AppForm()
         {
             InitializeComponent();
@@ -23,102 +28,128 @@ namespace DiningCourtApp
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            FordCourt court = new FordCourt();
-            string result = null;
-            string url = "https://api.hfs.purdue.edu/menus/v2/locations/Ford/2017-04-25";
-            HttpWebResponse response = null;
-            StreamReader reader = null;
 
-            try
-            {
-                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
-                request.UserAgent = @"Mozilla/6.0 (Windows NT 6.1; WOW64) AppleWebKit/535.2 (KHTML, like Gecko) Chrome/15.0.874.121 Safari/535.2";
-                request.Method = "GET";
-                request.Accept = "application/xml";
-                request.ContentType = "application/xml";
-                response = request.GetResponse() as HttpWebResponse;
-                reader = new StreamReader(response.GetResponseStream(), Encoding.UTF8);
-                result = reader.ReadToEnd();
-                System.Console.WriteLine(result);
-                XDocument xdoc = XDocument.Parse(result);
-                XElement childElement = (XElement)xdoc.Root.Descendants("Meals").Descendants("Meal").Descendants("Name").Single(x => (string)x.Value == "Lunch").Parent.LastNode;
-                XElement stnChildElement = (XElement)childElement.FirstNode;
-                do
-                {
-                    //Get Items Node 
-                    XElement itemsChildElement = (XElement)stnChildElement.FirstNode.NextNode;
-                    //Get Item Node
-                    XElement itemChildElement = (XElement)itemsChildElement.FirstNode;
-                    do
-                    {
-                        //Get the Name
-                        Console.WriteLine(itemChildElement.Element("Name").Value);
-                        court.getLunchMenu().addFood(new Food(itemChildElement.Element("Name").Value));
-                        //Go to Next Item Node
-                        itemChildElement = (XElement)itemChildElement.NextNode;
-                    } while (null != itemChildElement);
+            MenuPopulater pop = new MenuPopulater();
+            Searcher s = new Searcher();
 
-                    //Go to Next Station Node
-                    stnChildElement = (XElement)stnChildElement.NextNode;
-                } while (null != stnChildElement);
-
-                XElement dinnerElement = (XElement)xdoc.Root.Descendants("Meals").Descendants("Meal").Descendants("Name").Single(x => (string)x.Value == "Dinner").Parent.LastNode;
-                XElement dinChildElement = (XElement)childElement.FirstNode;
-                do
-                {
-                    //Get Items Node 
-                    XElement itemsChildElement = (XElement)dinChildElement.FirstNode.NextNode;
-                    //Get Item Node
-                    XElement itemChildElement = (XElement)itemsChildElement.FirstNode;
-                    do
-                    {
-                        //Get the Name
-                        Console.WriteLine(itemChildElement.Element("Name").Value);
-                        court.getDinnerMenu().addFood(new Food(itemChildElement.Element("Name").Value));
-                       // Console.WriteLine(court.getDinnerMenu().getList()[0].getName());
-                        //Go to Next Item Node
-                        itemChildElement = (XElement)itemChildElement.NextNode;
-                    } while (null != itemChildElement);
-
-                    //Go to Next Station Node
-                    dinChildElement = (XElement)dinChildElement.NextNode;
-                } while (null != dinChildElement);
-            }
-            catch (Exception ex)
-            {
-                // handle error
-                MessageBox.Show(ex.Message);
-            }
-            finally
-            {
-                if (reader != null)
-                    reader.Close();
-                if (response != null)
-                    response.Close();
-            }
+            pop.populate(Hillenbrand, "Hillenbrand");
+            pop.populate(Windsor, "Windsor");
+            pop.populate(Earhart, "Earhart");
+            pop.populate(Wiley, "Wiley");
+            pop.populate(Ford, "Ford");
         }
 
+        private void btnEnter_Click(object sender, EventArgs e)
+        {
+            Searcher s = new Searcher();
+            Menu theOne = new Menu();
+            String oneName = "";
+
+            if (cboTime.SelectedItem.Equals("Late Lunch"))
+            {
+                int w = s.find(cboFood.SelectedText, Windsor.getLateLunchMenu());
+                int r = s.find(cboFood.SelectedText, Hillenbrand.getLateLunchMenu());
+                int f = s.find(cboFood.SelectedText, Ford.getLateLunchMenu());
+
+                if (w >= r && w >= f)
+                {
+                    theOne = Windsor.getLateLunchMenu();
+                    oneName = "Windsor";
+                }
+
+                else if (f >= r && f >= w)
+                {
+                    theOne = Ford.getLateLunchMenu();
+                    oneName = "Ford";
+                }
+                else if (r >= f && r >= w)
+                {
+                    theOne = Hillenbrand.getLateLunchMenu();
+                    oneName = "Hillenbrand";
+                }
+
+                recLabel.Text = oneName;
+
+                foreach (Food food in theOne.getList())
+                {
+                    lstOut.Items.Add(food.getName());
+                }
+            }
+
+            if (cboTime.SelectedItem.Equals("Breakfast"))
+            {
+                int w = s.find(cboFood.SelectedText, Wiley.getBreakfastMenu());
+                int r = s.find(cboFood.SelectedText, Earhart.getBreakfastMenu());
+                int f = s.find(cboFood.SelectedText, Ford.getBreakfastMenu());
+
+                if (w >= r && w >= f)
+                {
+                    theOne = Wiley.getBreakfastMenu();
+                    oneName = "Wiley";
+                }
+
+                else if (f >= r && f >= w)
+                {
+                    theOne = Ford.getBreakfastMenu();
+                    oneName = "Ford";
+                }
+                else if (r >= f && r >= w)
+                {
+                    theOne = Earhart.getBreakfastMenu();
+                    oneName = "Earhart";
+                }
+
+                recLabel.Text = oneName;
+
+                foreach(Food food in theOne.getList())
+                    {
+                    lstOut.Items.Add(food.getName());
+                    }
+            }
+
+
+
+            
+        }
+
+        private void btnEnd_Click(object sender, EventArgs e)
+        {
+            System.Windows.Forms.Application.Exit();
+        }
     }
 
-    public class Searcher {
+    public class Searcher
+    {
 
+        public Searcher() { }
+        public int find(String food, Menu x)
+            {
+            int count = 0;
 
+            List<Food> list = x.getList();
 
-
-
+            foreach (Food f in list)
+            {
+                if (f.getName().ToLower().Contains(food.ToLower()) == true)
+                {
+                    count++;
+                }
+            }
+            return count;
+            }
 
     }
 
     public class MenuPopulater
     {
-        String name;
-        public MenuPopulater(String name)
+        
+        public MenuPopulater()
         {
-            this.name = name;
+           
         }
 
         // Populates Dinner
-        public void populateLLD(LLDCourt court)
+        public void populate(LLDCourt court, String name)
         {
             string result = null;
             string url = "https://api.hfs.purdue.edu/menus/v2/locations/" + name + "/2017-04-27";
@@ -149,7 +180,7 @@ namespace DiningCourtApp
                     do
                     {
                         //Get the Name
-                        Console.WriteLine(itemChildElement.Element("Name").Value);
+                        //Console.WriteLine(itemChildElement.Element("Name").Value);
                         court.getLunchMenu().addFood(new Food(itemChildElement.Element("Name").Value));
                         //Go to Next Item Node
                         itemChildElement = (XElement)itemChildElement.NextNode;
@@ -159,7 +190,7 @@ namespace DiningCourtApp
                 } while (null != stnChildElement);
 
                 XElement dinnerElement = (XElement)xdoc.Root.Descendants("Meals").Descendants("Meal").Descendants("Name").Single(x => (string)x.Value == "Dinner").Parent.LastNode;
-                XElement dinChildElement = (XElement)childElement.FirstNode;
+                XElement dinChildElement = (XElement)dinnerElement.FirstNode;
                 do
                 {
                     //Get Items Node 
@@ -169,7 +200,7 @@ namespace DiningCourtApp
                     do
                     {
                         //Get the Name
-                        Console.WriteLine(itemChildElement.Element("Name").Value);
+                       // Console.WriteLine(itemChildElement.Element("Name").Value);
                         court.getDinnerMenu().addFood(new Food(itemChildElement.Element("Name").Value));
                         //Go to Next Item Node
                         itemChildElement = (XElement)itemChildElement.NextNode;
@@ -180,7 +211,7 @@ namespace DiningCourtApp
                 } while (null != dinChildElement);
 
                 XElement lateLunchElement = (XElement)xdoc.Root.Descendants("Meals").Descendants("Meal").Descendants("Name").Single(x => (string)x.Value == "Late Lunch").Parent.LastNode;
-                XElement lateLunchChildElement = (XElement)childElement.FirstNode;
+                XElement lateLunchChildElement = (XElement)lateLunchElement.FirstNode;
                 do
                 {
                     //Get Items Node 
@@ -190,7 +221,7 @@ namespace DiningCourtApp
                     do
                     {
                         //Get the Name
-                        Console.WriteLine(itemChildElement.Element("Name").Value);
+                        //Console.WriteLine(itemChildElement.Element("Name").Value);
                         court.getLateLunchMenu().addFood(new Food(itemChildElement.Element("Name").Value));
                         //Go to Next Item Node
                         itemChildElement = (XElement)itemChildElement.NextNode;
@@ -215,7 +246,7 @@ namespace DiningCourtApp
             }
         }
 
-        public void populateBLD(BLDCourt court)
+        public void populate(BLDCourt court, String name)
         {
             string result = null;
             string url = "https://api.hfs.purdue.edu/menus/v2/locations/" + name + "/2017-04-27";
@@ -246,7 +277,7 @@ namespace DiningCourtApp
                     do
                     {
                         //Get the Name
-                        Console.WriteLine(itemChildElement.Element("Name").Value);
+                        //Console.WriteLine(itemChildElement.Element("Name").Value);
                         court.getLunchMenu().addFood(new Food(itemChildElement.Element("Name").Value));
                         //Go to Next Item Node
                         itemChildElement = (XElement)itemChildElement.NextNode;
@@ -256,7 +287,7 @@ namespace DiningCourtApp
                 } while (null != stnChildElement);
 
                 XElement dinnerElement = (XElement)xdoc.Root.Descendants("Meals").Descendants("Meal").Descendants("Name").Single(x => (string)x.Value == "Dinner").Parent.LastNode;
-                XElement dinChildElement = (XElement)childElement.FirstNode;
+                XElement dinChildElement = (XElement)dinnerElement.FirstNode;
                 do
                 {
                     //Get Items Node 
@@ -266,7 +297,7 @@ namespace DiningCourtApp
                     do
                     {
                         //Get the Name
-                        Console.WriteLine(itemChildElement.Element("Name").Value);
+                        //Console.WriteLine(itemChildElement.Element("Name").Value);
                         court.getDinnerMenu().addFood(new Food(itemChildElement.Element("Name").Value));
                         //Go to Next Item Node
                         itemChildElement = (XElement)itemChildElement.NextNode;
@@ -277,7 +308,7 @@ namespace DiningCourtApp
                 } while (null != dinChildElement);
 
                 XElement breakfastElement = (XElement)xdoc.Root.Descendants("Meals").Descendants("Meal").Descendants("Name").Single(x => (string)x.Value == "Breakfast").Parent.LastNode;
-                XElement breakfastChildElement = (XElement)childElement.FirstNode;
+                XElement breakfastChildElement = (XElement)breakfastElement.FirstNode;
                 do
                 {
                     //Get Items Node 
@@ -287,7 +318,7 @@ namespace DiningCourtApp
                     do
                     {
                         //Get the Name
-                        Console.WriteLine(itemChildElement.Element("Name").Value);
+                       // Console.WriteLine(itemChildElement.Element("Name").Value);
                         court.getBreakfastMenu().addFood(new Food(itemChildElement.Element("Name").Value));
                         //Go to Next Item Node
                         itemChildElement = (XElement)itemChildElement.NextNode;
@@ -312,7 +343,7 @@ namespace DiningCourtApp
             }
         }
 
-        public void populateFord(FordCourt court)
+        public void populate(FordCourt court, String name)
         {
 
             string result = null;
@@ -344,7 +375,7 @@ namespace DiningCourtApp
                     do
                     {
                         //Get the Name
-                        Console.WriteLine(itemChildElement.Element("Name").Value);
+                        //Console.WriteLine(itemChildElement.Element("Name").Value);
                         court.getLunchMenu().addFood(new Food(itemChildElement.Element("Name").Value));
                         //Go to Next Item Node
                         itemChildElement = (XElement)itemChildElement.NextNode;
@@ -354,7 +385,7 @@ namespace DiningCourtApp
                 } while (null != stnChildElement);
 
                 XElement dinnerElement = (XElement)xdoc.Root.Descendants("Meals").Descendants("Meal").Descendants("Name").Single(x => (string)x.Value == "Dinner").Parent.LastNode;
-                XElement dinChildElement = (XElement)childElement.FirstNode;
+                XElement dinChildElement = (XElement)dinnerElement.FirstNode;
                 do
                 {
                     //Get Items Node 
@@ -364,7 +395,7 @@ namespace DiningCourtApp
                     do
                     {
                         //Get the Name
-                        Console.WriteLine(itemChildElement.Element("Name").Value);
+                        //Console.WriteLine(itemChildElement.Element("Name").Value);
                         court.getDinnerMenu().addFood(new Food(itemChildElement.Element("Name").Value));
                         //Go to Next Item Node
                         itemChildElement = (XElement)itemChildElement.NextNode;
@@ -375,7 +406,7 @@ namespace DiningCourtApp
                 } while (null != dinChildElement);
 
                 XElement lateLunchElement = (XElement)xdoc.Root.Descendants("Meals").Descendants("Meal").Descendants("Name").Single(x => (string)x.Value == "Late Lunch").Parent.LastNode;
-                XElement lateLunchChildElement = (XElement)childElement.FirstNode;
+                XElement lateLunchChildElement = (XElement)lateLunchElement.FirstNode;
                 do
                 {
                     //Get Items Node 
@@ -385,7 +416,7 @@ namespace DiningCourtApp
                     do
                     {
                         //Get the Name
-                        Console.WriteLine(itemChildElement.Element("Name").Value);
+                        //Console.WriteLine(itemChildElement.Element("Name").Value);
                         court.getLateLunchMenu().addFood(new Food(itemChildElement.Element("Name").Value));
                         //Go to Next Item Node
                         itemChildElement = (XElement)itemChildElement.NextNode;
@@ -396,7 +427,7 @@ namespace DiningCourtApp
                 } while (null != lateLunchChildElement);
 
                 XElement breakfastElement = (XElement)xdoc.Root.Descendants("Meals").Descendants("Meal").Descendants("Name").Single(x => (string)x.Value == "Breakfast").Parent.LastNode;
-                XElement breakfastChildElement = (XElement)childElement.FirstNode;
+                XElement breakfastChildElement = (XElement)breakfastElement.FirstNode;
                 do
                 {
                     //Get Items Node 
@@ -406,7 +437,7 @@ namespace DiningCourtApp
                     do
                     {
                         //Get the Name
-                        Console.WriteLine(itemChildElement.Element("Name").Value);
+                        //Console.WriteLine(itemChildElement.Element("Name").Value);
                         court.getBreakfastMenu().addFood(new Food(itemChildElement.Element("Name").Value));
                         //Go to Next Item Node
                         itemChildElement = (XElement)itemChildElement.NextNode;
@@ -512,6 +543,9 @@ namespace DiningCourtApp
         public LLDCourt()
         {
             matches = 0;
+            lunchMenu = new Menu();
+            lateLunchMenu = new Menu();
+            dinnerMenu = new Menu();
         }
 
         public LLDCourt(Menu lunch, Menu late, Menu dinner)
@@ -558,6 +592,9 @@ namespace DiningCourtApp
         public BLDCourt()
         {
             matches = 0;
+            lunchMenu = new Menu();
+            breakfastMenu = new Menu();
+            dinnerMenu = new Menu();
         }
 
         public BLDCourt(Menu lunch, Menu bfast, Menu dinner)
