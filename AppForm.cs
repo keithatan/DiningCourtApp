@@ -107,9 +107,91 @@ namespace DiningCourtApp
                     }
             }
 
+            if (cboTime.SelectedItem.Equals("Dinner"))
+            {
+                int w = s.find(cboFood.SelectedText, Wiley.getDinnerMenu());
+                int r = s.find(cboFood.SelectedText, Earhart.getDinnerMenu());
+                int f = s.find(cboFood.SelectedText, Ford.getDinnerMenu());
+                int h = s.find(cboFood.SelectedText, Hillenbrand.getDinnerMenu());
+                int wi = s.find(cboFood.SelectedText, Windsor.getDinnerMenu());
 
+                if (w >= r && w >= f && w>= h && w>= wi)
+                {
+                    theOne = Wiley.getDinnerMenu();
+                    oneName = "Wiley";
+                }
 
-            
+                else if (f >= r && f >= w && f>= h && f >= wi)
+                {
+                    theOne = Ford.getDinnerMenu();
+                    oneName = "Ford";
+                }
+                else if (r >= f && r >= w && f>= h && f>= wi)
+                {
+                    theOne = Earhart.getDinnerMenu();
+                    oneName = "Earhart";
+                }
+                else if (h >= f && h >= w && h >= r && h >= wi)
+                {
+                    theOne = Hillenbrand.getDinnerMenu();
+                    oneName = "Hillenbrand";
+                }
+                else if (wi >= f && wi >= w && wi >= r && wi >= h)
+                {
+                    theOne = Windsor.getDinnerMenu();
+                    oneName = "Windsor";
+                }
+
+                recLabel.Text = oneName;
+
+                foreach (Food food in theOne.getList())
+                {
+                    lstOut.Items.Add(food.getName());
+                }
+            }
+
+            if (cboTime.SelectedItem.Equals("Lunch"))
+            {
+                int w = s.find(cboFood.SelectedText, Wiley.getLunchMenu());
+                int r = s.find(cboFood.SelectedText, Earhart.getLunchMenu());
+                int f = s.find(cboFood.SelectedText, Ford.getLunchMenu());
+                int h = s.find(cboFood.SelectedText, Hillenbrand.getLunchMenu());
+                int wi = s.find(cboFood.SelectedText, Windsor.getLunchMenu());
+
+                if (w >= r && w >= f && w >= h && w >= wi)
+                {
+                    theOne = Wiley.getLunchMenu();
+                    oneName = "Wiley";
+                }
+
+                else if (f >= r && f >= w && f >= h && f >= wi)
+                {
+                    theOne = Ford.getLunchMenu();
+                    oneName = "Ford";
+                }
+                else if (r >= f && r >= w && f >= h && f >= wi)
+                {
+                    theOne = Earhart.getLunchMenu();
+                    oneName = "Earhart";
+                }
+                else if (h >= f && h >= w && h >= r && h >= wi)
+                {
+                    theOne = Hillenbrand.getLunchMenu();
+                    oneName = "Hillenbrand";
+                }
+                else if (wi >= f && wi >= w && wi >= r && wi >= h)
+                {
+                    theOne = Windsor.getLunchMenu();
+                    oneName = "Windsor";
+                }
+
+                recLabel.Text = oneName;
+
+                foreach (Food food in theOne.getList())
+                {
+                    lstOut.Items.Add(food.getName());
+                }
+            }
         }
 
         private void btnEnd_Click(object sender, EventArgs e)
