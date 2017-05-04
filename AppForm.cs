@@ -41,15 +41,16 @@ namespace DiningCourtApp
 
         private void btnEnter_Click(object sender, EventArgs e)
         {
+            lstOut.Items.Clear();
             Searcher s = new Searcher();
             Menu theOne = new Menu();
             String oneName = "";
 
             if (cboTime.SelectedItem.Equals("Late Lunch"))
             {
-                int w = s.find(cboFood.SelectedText, Windsor.getLateLunchMenu());
-                int r = s.find(cboFood.SelectedText, Hillenbrand.getLateLunchMenu());
-                int f = s.find(cboFood.SelectedText, Ford.getLateLunchMenu());
+                int w = s.find(cboFood.SelectedItem.ToString(), Windsor.getLateLunchMenu());
+                int r = s.find(cboFood.SelectedItem.ToString(), Hillenbrand.getLateLunchMenu());
+                int f = s.find(cboFood.SelectedItem.ToString(), Ford.getLateLunchMenu());
 
                 if (w >= r && w >= f)
                 {
@@ -78,9 +79,9 @@ namespace DiningCourtApp
 
             if (cboTime.SelectedItem.Equals("Breakfast"))
             {
-                int w = s.find(cboFood.SelectedText, Wiley.getBreakfastMenu());
-                int r = s.find(cboFood.SelectedText, Earhart.getBreakfastMenu());
-                int f = s.find(cboFood.SelectedText, Ford.getBreakfastMenu());
+                int w = s.find(cboFood.SelectedItem.ToString(), Wiley.getBreakfastMenu());
+                int r = s.find(cboFood.SelectedItem.ToString(), Earhart.getBreakfastMenu());
+                int f = s.find(cboFood.SelectedItem.ToString(), Ford.getBreakfastMenu());
 
                 if (w >= r && w >= f)
                 {
@@ -109,11 +110,11 @@ namespace DiningCourtApp
 
             if (cboTime.SelectedItem.Equals("Dinner"))
             {
-                int w = s.find(cboFood.SelectedText, Wiley.getDinnerMenu());
-                int r = s.find(cboFood.SelectedText, Earhart.getDinnerMenu());
-                int f = s.find(cboFood.SelectedText, Ford.getDinnerMenu());
-                int h = s.find(cboFood.SelectedText, Hillenbrand.getDinnerMenu());
-                int wi = s.find(cboFood.SelectedText, Windsor.getDinnerMenu());
+                int w = s.find(cboFood.SelectedItem.ToString(), Wiley.getDinnerMenu());
+                int r = s.find(cboFood.SelectedItem.ToString(), Earhart.getDinnerMenu());
+                int f = s.find(cboFood.SelectedItem.ToString(), Ford.getDinnerMenu());
+                int h = s.find(cboFood.SelectedItem.ToString(), Hillenbrand.getDinnerMenu());
+                int wi = s.find(cboFood.SelectedItem.ToString(), Windsor.getDinnerMenu());
 
                 if (w >= r && w >= f && w>= h && w>= wi)
                 {
@@ -152,11 +153,11 @@ namespace DiningCourtApp
 
             if (cboTime.SelectedItem.Equals("Lunch"))
             {
-                int w = s.find(cboFood.SelectedText, Wiley.getLunchMenu());
-                int r = s.find(cboFood.SelectedText, Earhart.getLunchMenu());
-                int f = s.find(cboFood.SelectedText, Ford.getLunchMenu());
-                int h = s.find(cboFood.SelectedText, Hillenbrand.getLunchMenu());
-                int wi = s.find(cboFood.SelectedText, Windsor.getLunchMenu());
+                int w = s.find(cboFood.SelectedItem.ToString(), Wiley.getLunchMenu());
+                int r = s.find(cboFood.SelectedItem.ToString(), Earhart.getLunchMenu());
+                int f = s.find(cboFood.SelectedItem.ToString(), Ford.getLunchMenu());
+                int h = s.find(cboFood.SelectedItem.ToString(), Hillenbrand.getLunchMenu());
+                int wi = s.find(cboFood.SelectedItem.ToString(), Windsor.getLunchMenu());
 
                 if (w >= r && w >= f && w >= h && w >= wi)
                 {
@@ -233,8 +234,13 @@ namespace DiningCourtApp
         // Populates Dinner
         public void populate(LLDCourt court, String name)
         {
+            DateTime date = DateTime.Today;
+            String year = date.Year.ToString();
+            String day = date.Day.ToString();
+            String month = date.Month.ToString();
+
             string result = null;
-            string url = "https://api.hfs.purdue.edu/menus/v2/locations/" + name + "/2017-04-27";
+            string url = "https://api.hfs.purdue.edu/menus/v2/locations/" + name + "/" + year + "-" + month + "-"+ day;
             HttpWebResponse response = null;
             StreamReader reader = null;
 
@@ -330,8 +336,13 @@ namespace DiningCourtApp
 
         public void populate(BLDCourt court, String name)
         {
+            DateTime date = DateTime.Today;
+            String year = date.Year.ToString();
+            String day = date.Day.ToString();
+            String month = date.Month.ToString();
+
             string result = null;
-            string url = "https://api.hfs.purdue.edu/menus/v2/locations/" + name + "/2017-04-27";
+            string url = "https://api.hfs.purdue.edu/menus/v2/locations/" + name + "/" + year + "-" + month + "-" + day;
             HttpWebResponse response = null;
             StreamReader reader = null;
 
@@ -427,9 +438,13 @@ namespace DiningCourtApp
 
         public void populate(FordCourt court, String name)
         {
+            DateTime date = DateTime.Today;
+            String year = date.Year.ToString();
+            String day = date.Day.ToString();
+            String month = date.Month.ToString();
 
             string result = null;
-            string url = "https://api.hfs.purdue.edu/menus/v2/locations/" +name+ "/2017-04-27";
+            string url = "https://api.hfs.purdue.edu/menus/v2/locations/" + "Ford" + "/" + year + "-" + month + "-" + day;
             HttpWebResponse response = null;
             StreamReader reader = null;
 
